@@ -1,11 +1,11 @@
 /******************************************************************************
- * ÏîÄ¿Ãû³Æ£ºSTM32F4 PWMÒôÀÖ²¥·ÅÆ÷
- * ÏîÄ¿×÷ÓÃ£º»ùÓÚSTM32F407µÄPWMÒôÀÖ²¥·ÅÏµÍ³£¬Í¨¹ı¶¨Ê±Æ÷TIM3²úÉúPWM²¨ĞÎÇı¶¯·äÃùÆ÷²¥·ÅÒôÀÖ
- *           Ö§³Ö¶àÊ×ÀÖÇú²¥·Å£¬°üº¬¾«È·µÄ½ÚÅÄ¿ØÖÆºÍÒô·ûÆµÂÊÉú³É
- * ×÷Õß£ºRUN
- * Íê³ÉÊ±¼ä£º2023Äê
- * Ó²¼şÆ½Ì¨£ºSTM32F407ZGT6
- * Òı½ÅÅäÖÃ£ºPC6 - TIM3_CH1 PWMÊä³ö
+ * é¡¹ç›®åç§°ï¼šSTM32F4 PWMéŸ³ä¹æ’­æ”¾å™¨
+ * é¡¹ç›®ä½œç”¨ï¼šåŸºäºSTM32F407çš„PWMéŸ³ä¹æ’­æ”¾ç³»ç»Ÿï¼Œé€šè¿‡å®šæ—¶å™¨TIM3äº§ç”ŸPWMæ³¢å½¢é©±åŠ¨èœ‚é¸£å™¨æ’­æ”¾éŸ³ä¹
+ *           æ”¯æŒå¤šé¦–ä¹æ›²æ’­æ”¾ï¼ŒåŒ…å«ç²¾ç¡®çš„èŠ‚æ‹æ§åˆ¶å’ŒéŸ³ç¬¦é¢‘ç‡ç”Ÿæˆ
+ * ä½œè€…ï¼šRUN
+ * å®Œæˆæ—¶é—´ï¼š2025å¹´10æœˆ20å·
+ * ç¡¬ä»¶å¹³å°ï¼šSTM32F407ZGT6
+ * å¼•è„šé…ç½®ï¼šPC6 - TIM3_CH1 PWMè¾“å‡º
  ******************************************************************************/
 
 #include "stm32f4xx.h"
@@ -14,113 +14,113 @@
 #include "key.h"
 #include "stdio.h"
 
-// PWMÕ¼¿Õ±È±äÁ¿
-volatile uint16_t pwm_duty_cycle = 50;   // ³õÊ¼Õ¼¿Õ±È50%
+// PWMå ç©ºæ¯”å˜é‡
+volatile uint16_t pwm_duty_cycle = 50;   // åˆå§‹å ç©ºæ¯”50%
 
 /**
-  * @brief  GPIO³õÊ¼»¯º¯Êı
-  * @param  ÎŞ
-  * @retval ÎŞ
-  * @º¯Êı¹¦ÄÜ£ºÅäÖÃPC6Òı½ÅÎªTIM3Í¨µÀ1µÄ¸´ÓÃ¹¦ÄÜÊä³ö
-  * @º¯ÊıÊµÀı£ºGPIO1_Init();
-  * @±¸×¢£ºPC6¶ÔÓ¦TIM3_CH1£¬ÓÃÓÚPWM²¨ĞÎÊä³ö
+  * @brief  GPIOåˆå§‹åŒ–å‡½æ•°
+  * @param  æ— 
+  * @retval æ— 
+  * @å‡½æ•°åŠŸèƒ½ï¼šé…ç½®PC6å¼•è„šä¸ºTIM3é€šé“1çš„å¤ç”¨åŠŸèƒ½è¾“å‡º
+  * @å‡½æ•°å®ä¾‹ï¼šGPIO1_Init();
+  * @å¤‡æ³¨ï¼šPC6å¯¹åº”TIM3_CH1ï¼Œç”¨äºPWMæ³¢å½¢è¾“å‡º
   */
 void GPIO1_Init(void)
 {
     GPIO_InitTypeDef GPIO_InitStructure;
     
-    // Ê¹ÄÜGPIOCÊ±ÖÓ
+    // ä½¿èƒ½GPIOCæ—¶é’Ÿ
     RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOC, ENABLE);
     
-    // ÅäÖÃPC6ÎªTIM3Í¨µÀ1Êä³ö
+    // é…ç½®PC6ä¸ºTIM3é€šé“1è¾“å‡º
     GPIO_InitStructure.GPIO_Pin = GPIO_Pin_6;
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;        // ¸´ÓÃ¹¦ÄÜÄ£Ê½
-    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;  // ¸ßËÙÊä³ö
-    GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;      // ÍÆÍìÊä³ö
-    GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;        // ÉÏÀ­µç×è
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;        // å¤ç”¨åŠŸèƒ½æ¨¡å¼
+    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;  // é«˜é€Ÿè¾“å‡º
+    GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;      // æ¨æŒ½è¾“å‡º
+    GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;        // ä¸Šæ‹‰ç”µé˜»
     GPIO_Init(GPIOC, &GPIO_InitStructure);
     
-    // Á¬½ÓPC6µ½TIM3µÄÍ¨µÀ1
+    // è¿æ¥PC6åˆ°TIM3çš„é€šé“1
     GPIO_PinAFConfig(GPIOC, GPIO_PinSource6, GPIO_AF_TIM3);
 }
 
 /**
-  * @brief  TIM3 PWM³õÊ¼»¯º¯Êı
-  * @param  ÎŞ
-  * @retval ÎŞ
-  * @º¯Êı¹¦ÄÜ£º³õÊ¼»¯TIM3ÎªPWMÊä³öÄ£Ê½£¬³õÊ¼ÆµÂÊ1kHz
-  * @º¯ÊıÊµÀı£ºTIM3_PWM_Init();
-  * @±¸×¢£ºÊ¹ÓÃTIM3Í¨µÀ1²úÉúPWM²¨ĞÎ£¬Çı¶¯·äÃùÆ÷·¢Éù
+  * @brief  TIM3 PWMåˆå§‹åŒ–å‡½æ•°
+  * @param  æ— 
+  * @retval æ— 
+  * @å‡½æ•°åŠŸèƒ½ï¼šåˆå§‹åŒ–TIM3ä¸ºPWMè¾“å‡ºæ¨¡å¼ï¼Œåˆå§‹é¢‘ç‡1kHz
+  * @å‡½æ•°å®ä¾‹ï¼šTIM3_PWM_Init();
+  * @å¤‡æ³¨ï¼šä½¿ç”¨TIM3é€šé“1äº§ç”ŸPWMæ³¢å½¢ï¼Œé©±åŠ¨èœ‚é¸£å™¨å‘å£°
   */
 void TIM3_PWM_Init(void)
 {
     TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure;
     TIM_OCInitTypeDef TIM_OCInitStructure;
     
-    // Ê¹ÄÜTIM3Ê±ÖÓ
+    // ä½¿èƒ½TIM3æ—¶é’Ÿ
     RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM3, ENABLE);
     
-    // ¶¨Ê±Æ÷»ù´¡ÅäÖÃ - ³õÊ¼ÆµÂÊ1kHz
+    // å®šæ—¶å™¨åŸºç¡€é…ç½® - åˆå§‹é¢‘ç‡1kHz
     TIM_TimeBaseStructure.TIM_Prescaler = 84 - 1;        // 84MHz/84 = 1MHz
-    TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;  // ÏòÉÏ¼ÆÊıÄ£Ê½
+    TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;  // å‘ä¸Šè®¡æ•°æ¨¡å¼
     TIM_TimeBaseStructure.TIM_Period = 1000 - 1;         // 1MHz/1000 = 1kHz
-    TIM_TimeBaseStructure.TIM_ClockDivision = TIM_CKD_DIV1;      // Ê±ÖÓ²»·ÖÆµ
-    TIM_TimeBaseStructure.TIM_RepetitionCounter = 0;     // ÖØ¸´¼ÆÊıÆ÷
+    TIM_TimeBaseStructure.TIM_ClockDivision = TIM_CKD_DIV1;      // æ—¶é’Ÿä¸åˆ†é¢‘
+    TIM_TimeBaseStructure.TIM_RepetitionCounter = 0;     // é‡å¤è®¡æ•°å™¨
     TIM_TimeBaseInit(TIM3, &TIM_TimeBaseStructure);
     
-    // PWMÄ£Ê½ÅäÖÃ
-    TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_PWM1;    // PWMÄ£Ê½1
-    TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable;  // Ê¹ÄÜÊä³ö
-    TIM_OCInitStructure.TIM_OutputNState = TIM_OutputNState_Disable; // ½ûÓÃ»¥²¹Êä³ö
-    TIM_OCInitStructure.TIM_Pulse = pwm_duty_cycle;      // ³õÊ¼Õ¼¿Õ±È
-    TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_High; // Êä³ö¼«ĞÔ¸ß
-    TIM_OCInitStructure.TIM_OCIdleState = TIM_OCIdleState_Reset; // ¿ÕÏĞ×´Ì¬µÍ
+    // PWMæ¨¡å¼é…ç½®
+    TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_PWM1;    // PWMæ¨¡å¼1
+    TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable;  // ä½¿èƒ½è¾“å‡º
+    TIM_OCInitStructure.TIM_OutputNState = TIM_OutputNState_Disable; // ç¦ç”¨äº’è¡¥è¾“å‡º
+    TIM_OCInitStructure.TIM_Pulse = pwm_duty_cycle;      // åˆå§‹å ç©ºæ¯”
+    TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_High; // è¾“å‡ºææ€§é«˜
+    TIM_OCInitStructure.TIM_OCIdleState = TIM_OCIdleState_Reset; // ç©ºé—²çŠ¶æ€ä½
     TIM_OC1Init(TIM3, &TIM_OCInitStructure);
     
-    // Ê¹ÄÜTIM3Ô¤×°ÔØ¼Ä´æÆ÷
+    // ä½¿èƒ½TIM3é¢„è£…è½½å¯„å­˜å™¨
     TIM_OC1PreloadConfig(TIM3, TIM_OCPreload_Enable);
     TIM_ARRPreloadConfig(TIM3, ENABLE);
     
-    // Ê¹ÄÜTIM3
+    // ä½¿èƒ½TIM3
     TIM_Cmd(TIM3, ENABLE);
 }
 
 /**
-  * @brief  ÉèÖÃPWMÆµÂÊº¯Êı
-  * @param  freq: ËùĞèµÄPWMÆµÂÊ(Hz)
-  * @retval ÎŞ
-  * @º¯Êı¹¦ÄÜ£º¶¯Ì¬ÉèÖÃPWMÊä³öÆµÂÊ£¬ÓÃÓÚ²úÉú²»Í¬Òô¸ßµÄÒô·û
-  * @º¯ÊıÊµÀı£ºSet_PWM_Frequency(440); // ÉèÖÃÆµÂÊÎª440Hz(A4Òô)
-  * @±¸×¢£ºÆµÂÊÎª0Ê±¹Ø±ÕPWMÊä³ö£¬×î´óÆµÂÊÊÜ¶¨Ê±Æ÷Ê±ÖÓÏŞÖÆ
+  * @brief  è®¾ç½®PWMé¢‘ç‡å‡½æ•°
+  * @param  freq: æ‰€éœ€çš„PWMé¢‘ç‡(Hz)
+  * @retval æ— 
+  * @å‡½æ•°åŠŸèƒ½ï¼šåŠ¨æ€è®¾ç½®PWMè¾“å‡ºé¢‘ç‡ï¼Œç”¨äºäº§ç”Ÿä¸åŒéŸ³é«˜çš„éŸ³ç¬¦
+  * @å‡½æ•°å®ä¾‹ï¼šSet_PWM_Frequency(440); // è®¾ç½®é¢‘ç‡ä¸º440Hz(A4éŸ³)
+  * @å¤‡æ³¨ï¼šé¢‘ç‡ä¸º0æ—¶å…³é—­PWMè¾“å‡ºï¼Œæœ€å¤§é¢‘ç‡å—å®šæ—¶å™¨æ—¶é’Ÿé™åˆ¶
   */
 void Set_PWM_Frequency(uint32_t freq)
 {
     TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure;
-    uint32_t timer_clock = 84000000;  // TIM3Ê±ÖÓÆµÂÊ84MHz
+    uint32_t timer_clock = 84000000;  // TIM3æ—¶é’Ÿé¢‘ç‡84MHz
     uint32_t prescaler, period;
     
     if(freq == 0 || freq > timer_clock)
     {
-        // ÆµÂÊÎª0Ê±¹Ø±ÕPWMÊä³ö
+        // é¢‘ç‡ä¸º0æ—¶å…³é—­PWMè¾“å‡º
         TIM_Cmd(TIM3, DISABLE);
         return;
     }
     
-    // Í£Ö¹¶¨Ê±Æ÷
+    // åœæ­¢å®šæ—¶å™¨
     TIM_Cmd(TIM3, DISABLE);
     
-    // ¼ÆËãÔ¤·ÖÆµÆ÷ºÍÖÜÆÚÖµ
+    // è®¡ç®—é¢„åˆ†é¢‘å™¨å’Œå‘¨æœŸå€¼
     prescaler = 0;
     period = (timer_clock / freq) - 1;
     
-    // Èç¹ûÖÜÆÚÖµ³¬¹ı16Î»×î´óÖµ£¬ĞèÒªÔö¼ÓÔ¤·ÖÆµ
+    // å¦‚æœå‘¨æœŸå€¼è¶…è¿‡16ä½æœ€å¤§å€¼ï¼Œéœ€è¦å¢åŠ é¢„åˆ†é¢‘
     if(period > 0xFFFF)
     {
         prescaler = (period / 0xFFFF);
         period = (timer_clock / (freq * (prescaler + 1))) - 1;
     }
     
-    // ÖØĞÂÅäÖÃ¶¨Ê±Æ÷
+    // é‡æ–°é…ç½®å®šæ—¶å™¨
     TIM_TimeBaseStructure.TIM_Prescaler = prescaler;
     TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
     TIM_TimeBaseStructure.TIM_Period = period;
@@ -128,113 +128,113 @@ void Set_PWM_Frequency(uint32_t freq)
     TIM_TimeBaseStructure.TIM_RepetitionCounter = 0;
     TIM_TimeBaseInit(TIM3, &TIM_TimeBaseStructure);
     
-    // ±£³Öµ±Ç°Õ¼¿Õ±È
+    // ä¿æŒå½“å‰å ç©ºæ¯”
     TIM_SetCompare1(TIM3, (period + 1) * pwm_duty_cycle / 100);
     
-    // ÖØĞÂÊ¹ÄÜ¶¨Ê±Æ÷
+    // é‡æ–°ä½¿èƒ½å®šæ—¶å™¨
     TIM_Cmd(TIM3, ENABLE);
 }
 
 /**
-  * @brief  ÏµÍ³Ê±ÖÓÅäÖÃº¯Êı
-  * @param  ÎŞ
-  * @retval ÎŞ
-  * @º¯Êı¹¦ÄÜ£ºÅäÖÃÏµÍ³Ê±ÖÓºÍÍâÉèÊ±ÖÓ
-  * @º¯ÊıÊµÀı£ºRCC_Configuration();
-  * @±¸×¢£ºÏµÍ³Ê±ÖÓÅäÖÃÎª168MHz£¬Ê¹ÄÜËùĞèÍâÉèÊ±ÖÓ
+  * @brief  ç³»ç»Ÿæ—¶é’Ÿé…ç½®å‡½æ•°
+  * @param  æ— 
+  * @retval æ— 
+  * @å‡½æ•°åŠŸèƒ½ï¼šé…ç½®ç³»ç»Ÿæ—¶é’Ÿå’Œå¤–è®¾æ—¶é’Ÿ
+  * @å‡½æ•°å®ä¾‹ï¼šRCC_Configuration();
+  * @å¤‡æ³¨ï¼šç³»ç»Ÿæ—¶é’Ÿé…ç½®ä¸º168MHzï¼Œä½¿èƒ½æ‰€éœ€å¤–è®¾æ—¶é’Ÿ
   */
 void RCC_Configuration(void)
 {
-    // ÏµÍ³Ê±ÖÓÅäÖÃÎª168MHz
+    // ç³»ç»Ÿæ—¶é’Ÿé…ç½®ä¸º168MHz
     SystemInit();
     
-    // Ê¹ÄÜÍâÉèÊ±ÖÓ
+    // ä½¿èƒ½å¤–è®¾æ—¶é’Ÿ
     RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOC, ENABLE);
     RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM3, ENABLE);
 }
 
 /**
-  * @brief  TIM2¶¨Ê±Æ÷³õÊ¼»¯º¯Êı
-  * @param  ÎŞ
-  * @retval ÎŞ
-  * @º¯Êı¹¦ÄÜ£º³õÊ¼»¯TIM2ÓÃÓÚ¶¨Ê±ÖĞ¶Ï£¬Ìá¹©¾«È·µÄÊ±¼ä»ù×¼
-  * @º¯ÊıÊµÀı£ºTIM2_Init();
-  * @±¸×¢£ºTIM2ÅäÖÃÎª10msÖĞ¶Ï£¬ÓÃÓÚÒô·ûÊ±³¤¿ØÖÆ
+  * @brief  TIM2å®šæ—¶å™¨åˆå§‹åŒ–å‡½æ•°
+  * @param  æ— 
+  * @retval æ— 
+  * @å‡½æ•°åŠŸèƒ½ï¼šåˆå§‹åŒ–TIM2ç”¨äºå®šæ—¶ä¸­æ–­ï¼Œæä¾›ç²¾ç¡®çš„æ—¶é—´åŸºå‡†
+  * @å‡½æ•°å®ä¾‹ï¼šTIM2_Init();
+  * @å¤‡æ³¨ï¼šTIM2é…ç½®ä¸º10msä¸­æ–­ï¼Œç”¨äºéŸ³ç¬¦æ—¶é•¿æ§åˆ¶
   */
 void TIM2_Init(void)
 {
     TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure;
     NVIC_InitTypeDef NVIC_InitStructure;
     
-    // Ê¹ÄÜTIM2Ê±ÖÓ
+    // ä½¿èƒ½TIM2æ—¶é’Ÿ
     RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2, ENABLE);
     
-    // ¶¨Ê±Æ÷»ù´¡ÅäÖÃ - 10msÖĞ¶Ï
+    // å®šæ—¶å™¨åŸºç¡€é…ç½® - 10msä¸­æ–­
     // 84MHz / 8400 = 10kHz, 10kHz / 100 = 100Hz (10ms)
-    TIM_TimeBaseStructure.TIM_Prescaler = 8400 - 1;      // ·ÖÆµµ½10kHz
+    TIM_TimeBaseStructure.TIM_Prescaler = 8400 - 1;      // åˆ†é¢‘åˆ°10kHz
     TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
-    TIM_TimeBaseStructure.TIM_Period = 100 - 1;          // 100¸ö¼ÆÊı = 10ms
+    TIM_TimeBaseStructure.TIM_Period = 100 - 1;          // 100ä¸ªè®¡æ•° = 10ms
     TIM_TimeBaseStructure.TIM_ClockDivision = TIM_CKD_DIV1;
     TIM_TimeBaseStructure.TIM_RepetitionCounter = 0;
     TIM_TimeBaseInit(TIM2, &TIM_TimeBaseStructure);
     
-    // Ê¹ÄÜTIM2¸üĞÂÖĞ¶Ï
+    // ä½¿èƒ½TIM2æ›´æ–°ä¸­æ–­
     TIM_ITConfig(TIM2, TIM_IT_Update, ENABLE);
     
-    // ÅäÖÃNVIC
+    // é…ç½®NVIC
     NVIC_InitStructure.NVIC_IRQChannel = TIM2_IRQn;
     NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;
     NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
     NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
     NVIC_Init(&NVIC_InitStructure);
     
-    // Ê¹ÄÜTIM2
+    // ä½¿èƒ½TIM2
     TIM_Cmd(TIM2, ENABLE);
 }
 
-// TIM2ÖĞ¶Ï¼ÆÊıÆ÷
+// TIM2ä¸­æ–­è®¡æ•°å™¨
 volatile uint32_t timer2_counter = 0;
 
 /**
-  * @brief  ºÁÃë¼¶ÑÓÊ±º¯Êı
-  * @param  ms: ÒªÑÓÊ±µÄºÁÃëÊı
-  * @retval ÎŞ
-  * @º¯Êı¹¦ÄÜ£º»ùÓÚTIM2¶¨Ê±Æ÷µÄ¾«È·ºÁÃëÑÓÊ±
-  * @º¯ÊıÊµÀı£ºdelay_ms(500); // ÑÓÊ±500ms
-  * @±¸×¢£ºÒÀÀµTIM2µÄ10msÖĞ¶Ï£¬¾«¶È¡À10ms
+  * @brief  æ¯«ç§’çº§å»¶æ—¶å‡½æ•°
+  * @param  ms: è¦å»¶æ—¶çš„æ¯«ç§’æ•°
+  * @retval æ— 
+  * @å‡½æ•°åŠŸèƒ½ï¼šåŸºäºTIM2å®šæ—¶å™¨çš„ç²¾ç¡®æ¯«ç§’å»¶æ—¶
+  * @å‡½æ•°å®ä¾‹ï¼šdelay_ms(500); // å»¶æ—¶500ms
+  * @å¤‡æ³¨ï¼šä¾èµ–TIM2çš„10msä¸­æ–­ï¼Œç²¾åº¦Â±10ms
   */
 void delay_ms(uint32_t ms)
 {
     uint32_t start_time = timer2_counter;
     
-    // ¼ÆËãĞèÒªµÈ´ıµÄ¶¨Ê±Æ÷½ÚÅÄÊı
-    // Ã¿10msÒ»¸ö½ÚÅÄ£¬ËùÒÔms/10¾ÍÊÇĞèÒªµÄ½ÚÅÄÊı
-    uint32_t ticks_to_wait = (ms + 9) / 10;  // ÏòÉÏÈ¡Õû
+    // è®¡ç®—éœ€è¦ç­‰å¾…çš„å®šæ—¶å™¨èŠ‚æ‹æ•°
+    // æ¯10msä¸€ä¸ªèŠ‚æ‹ï¼Œæ‰€ä»¥ms/10å°±æ˜¯éœ€è¦çš„èŠ‚æ‹æ•°
+    uint32_t ticks_to_wait = (ms + 9) / 10;  // å‘ä¸Šå–æ•´
     
-    // µÈ´ı×ã¹»µÄÊ±¼ä½ÚÅÄ
+    // ç­‰å¾…è¶³å¤Ÿçš„æ—¶é—´èŠ‚æ‹
     while ((timer2_counter - start_time) < ticks_to_wait)
     {
-        // ¿ÕÑ­»·µÈ´ı
+        // ç©ºå¾ªç¯ç­‰å¾…
     }
 }
 
 /**
-  * @brief  Ãë¼¶ÑÓÊ±º¯Êı
-  * @param  seconds: ÒªÑÓÊ±µÄÃëÊı
-  * @retval ÎŞ
-  * @º¯Êı¹¦ÄÜ£º»ùÓÚdelay_msµÄÃë¼¶ÑÓÊ±
-  * @º¯ÊıÊµÀı£ºdelay_s(2); // ÑÓÊ±2Ãë
-  * @±¸×¢£ºµ÷ÓÃdelay_msÊµÏÖ£¬¾«¶ÈÓëdelay_msÏàÍ¬
+  * @brief  ç§’çº§å»¶æ—¶å‡½æ•°
+  * @param  seconds: è¦å»¶æ—¶çš„ç§’æ•°
+  * @retval æ— 
+  * @å‡½æ•°åŠŸèƒ½ï¼šåŸºäºdelay_msçš„ç§’çº§å»¶æ—¶
+  * @å‡½æ•°å®ä¾‹ï¼šdelay_s(2); // å»¶æ—¶2ç§’
+  * @å¤‡æ³¨ï¼šè°ƒç”¨delay_mså®ç°ï¼Œç²¾åº¦ä¸delay_msç›¸åŒ
   */
 void delay_s(uint32_t seconds)
 {
     delay_ms(seconds * 1000);
 }
 
-// ============================ Òô·ûÆµÂÊ¶¨Òå ============================
-// C3µ½B5Òô·ûÆµÂÊ¶¨Òå (µ¥Î»: Hz)
+// ============================ éŸ³ç¬¦é¢‘ç‡å®šä¹‰ ============================
+// C3åˆ°B5éŸ³ç¬¦é¢‘ç‡å®šä¹‰ (å•ä½: Hz)
 
-// µÍÒôÇø C3-B3
+// ä½éŸ³åŒº C3-B3
 #define C3  130
 #define C3s 138
 #define D3  146
@@ -248,7 +248,7 @@ void delay_s(uint32_t seconds)
 #define A3s 233
 #define B3  247
 
-// ÖĞÒôÇø C4-B4
+// ä¸­éŸ³åŒº C4-B4
 #define C4  261
 #define C4s 277
 #define D4  293
@@ -262,7 +262,7 @@ void delay_s(uint32_t seconds)
 #define A4s 466
 #define B4  494
 
-// ¸ßÒôÇø C5-B5
+// é«˜éŸ³åŒº C5-B5
 #define C5  523
 #define C5s 554
 #define D5  587
@@ -276,172 +276,172 @@ void delay_s(uint32_t seconds)
 #define A5s 932
 #define B5  988
 
-// ============================ ¼òÆ×Òô·ûºê¶¨Òå ============================
-// ·½±ãÑİ×àµÄ¼òÆ×Òô·û¶¨Òå
+// ============================ ç®€è°±éŸ³ç¬¦å®å®šä¹‰ ============================
+// æ–¹ä¾¿æ¼”å¥çš„ç®€è°±éŸ³ç¬¦å®šä¹‰
 
-// ÖĞÒôÇøÒô·û
-#define One_Zhong   Set_PWM_Frequency(C4)  // ÖĞÒô1
-#define Two_Zhong   Set_PWM_Frequency(D4)  // ÖĞÒô2
-#define Three_Zhong Set_PWM_Frequency(E4)  // ÖĞÒô3
-#define Four_Zhong  Set_PWM_Frequency(F4)  // ÖĞÒô4
-#define Five_Zhong  Set_PWM_Frequency(G4)  // ÖĞÒô5
-#define Six_Zhong   Set_PWM_Frequency(A4)  // ÖĞÒô6
-#define Seven_Zhong Set_PWM_Frequency(B4)  // ÖĞÒô7
+// ä¸­éŸ³åŒºéŸ³ç¬¦
+#define One_Zhong   Set_PWM_Frequency(C4)  // ä¸­éŸ³1
+#define Two_Zhong   Set_PWM_Frequency(D4)  // ä¸­éŸ³2
+#define Three_Zhong Set_PWM_Frequency(E4)  // ä¸­éŸ³3
+#define Four_Zhong  Set_PWM_Frequency(F4)  // ä¸­éŸ³4
+#define Five_Zhong  Set_PWM_Frequency(G4)  // ä¸­éŸ³5
+#define Six_Zhong   Set_PWM_Frequency(A4)  // ä¸­éŸ³6
+#define Seven_Zhong Set_PWM_Frequency(B4)  // ä¸­éŸ³7
 
-// ¸ßÒôÇøÒô·û
-#define One_High    Set_PWM_Frequency(C5)  // ¸ßÒô1
-#define Two_High    Set_PWM_Frequency(D5)  // ¸ßÒô2
-#define Three_High  Set_PWM_Frequency(E5)  // ¸ßÒô3
-#define Four_High   Set_PWM_Frequency(F5)  // ¸ßÒô4
-#define Five_High   Set_PWM_Frequency(G5)  // ¸ßÒô5
-#define Six_High    Set_PWM_Frequency(A5)  // ¸ßÒô6
-#define Seven_High  Set_PWM_Frequency(B5)  // ¸ßÒô7
+// é«˜éŸ³åŒºéŸ³ç¬¦
+#define One_High    Set_PWM_Frequency(C5)  // é«˜éŸ³1
+#define Two_High    Set_PWM_Frequency(D5)  // é«˜éŸ³2
+#define Three_High  Set_PWM_Frequency(E5)  // é«˜éŸ³3
+#define Four_High   Set_PWM_Frequency(F5)  // é«˜éŸ³4
+#define Five_High   Set_PWM_Frequency(G5)  // é«˜éŸ³5
+#define Six_High    Set_PWM_Frequency(A5)  // é«˜éŸ³6
+#define Seven_High  Set_PWM_Frequency(B5)  // é«˜éŸ³7
 
-// µÍÒôÇøÒô·û
-#define One_Low     Set_PWM_Frequency(C3)  // µÍÒô1
-#define Two_Low     Set_PWM_Frequency(D3)  // µÍÒô2
-#define Three_Low   Set_PWM_Frequency(E3)  // µÍÒô3
-#define Four_Low    Set_PWM_Frequency(F3)  // µÍÒô4
-#define Five_Low    Set_PWM_Frequency(G3)  // µÍÒô5
-#define Six_Low     Set_PWM_Frequency(A3)  // µÍÒô6
-#define Seven_Low   Set_PWM_Frequency(B3)  // µÍÒô7
+// ä½éŸ³åŒºéŸ³ç¬¦
+#define One_Low     Set_PWM_Frequency(C3)  // ä½éŸ³1
+#define Two_Low     Set_PWM_Frequency(D3)  // ä½éŸ³2
+#define Three_Low   Set_PWM_Frequency(E3)  // ä½éŸ³3
+#define Four_Low    Set_PWM_Frequency(F3)  // ä½éŸ³4
+#define Five_Low    Set_PWM_Frequency(G3)  // ä½éŸ³5
+#define Six_Low     Set_PWM_Frequency(A3)  // ä½éŸ³6
+#define Seven_Low   Set_PWM_Frequency(B3)  // ä½éŸ³7
 
-// ĞİÖ¹·û£¨¹Ø±ÕÉùÒô£©
+// ä¼‘æ­¢ç¬¦ï¼ˆå…³é—­å£°éŸ³ï¼‰
 #define REST Set_PWM_Frequency(0)
 
-// ============================ ½ÚÅÄÊ±¼ä¶¨Òå ============================
-// Ê¹ÓÃ¾«×¼ÑÓÊ±ÖØĞÂ¶¨Òå½ÚÅÄÊ±¼ä£¨µ¥Î»£ººÁÃë£©
-#define WHOLE_NOTE      500   // È«Òô·û£º500ms
-#define QUARTER_NOTE    WHOLE_NOTE/4   // ËÄ·ÖÒô·û£º125ms
-#define HALF_NOTE       WHOLE_NOTE/2   // ¶ş·ÖÒô·û£º250ms
-#define EIGHTH_NOTE     WHOLE_NOTE/8   // °Ë·ÖÒô·û£º62.5ms
+// ============================ èŠ‚æ‹æ—¶é—´å®šä¹‰ ============================
+// ä½¿ç”¨ç²¾å‡†å»¶æ—¶é‡æ–°å®šä¹‰èŠ‚æ‹æ—¶é—´ï¼ˆå•ä½ï¼šæ¯«ç§’ï¼‰
+#define WHOLE_NOTE      500   // å…¨éŸ³ç¬¦ï¼š500ms
+#define QUARTER_NOTE    WHOLE_NOTE/4   // å››åˆ†éŸ³ç¬¦ï¼š125ms
+#define HALF_NOTE       WHOLE_NOTE/2   // äºŒåˆ†éŸ³ç¬¦ï¼š250ms
+#define EIGHTH_NOTE     WHOLE_NOTE/8   // å…«åˆ†éŸ³ç¬¦ï¼š62.5ms
 
 /**
-  * @brief  ²¥·ÅÀÖÇúº¯Êı
-  * @param  arr: ÀÖÇúÊı¾İ¶şÎ¬Êı×é
-  * @param  rows: ÀÖÇúÊı¾İĞĞÊı
-  * @retval ÎŞ
-  * @º¯Êı¹¦ÄÜ£º¸ù¾İÊäÈëµÄÀÖÇúÊı¾İ²¥·ÅÍêÕûµÄÒôÀÖ
-  * @º¯ÊıÊµÀı£ºBoFangGeQu(xiaoXingXing, sizeof(xiaoXingXing)/sizeof(xiaoXingXing[0]));
-  * @±¸×¢£ºÀÖÇúÊı¾İ¸ñÊ½Îª[ÒôÇø, Òôµ÷, Ê±Öµ]£¬ĞİÖ¹·ûÎª[0,0,Ê±Öµ]
+  * @brief  æ’­æ”¾ä¹æ›²å‡½æ•°
+  * @param  arr: ä¹æ›²æ•°æ®äºŒç»´æ•°ç»„
+  * @param  rows: ä¹æ›²æ•°æ®è¡Œæ•°
+  * @retval æ— 
+  * @å‡½æ•°åŠŸèƒ½ï¼šæ ¹æ®è¾“å…¥çš„ä¹æ›²æ•°æ®æ’­æ”¾å®Œæ•´çš„éŸ³ä¹
+  * @å‡½æ•°å®ä¾‹ï¼šBoFangGeQu(xiaoXingXing, sizeof(xiaoXingXing)/sizeof(xiaoXingXing[0]));
+  * @å¤‡æ³¨ï¼šä¹æ›²æ•°æ®æ ¼å¼ä¸º[éŸ³åŒº, éŸ³è°ƒ, æ—¶å€¼]ï¼Œä¼‘æ­¢ç¬¦ä¸º[0,0,æ—¶å€¼]
   */
 void BoFangGeQu(int arr[][3], int rows) 
 {
     uint32_t duration;
-    // ¶¨ÒåÒô·ûÆµÂÊ±í [ÒôÇø][Òôµ÷] -> ÆµÂÊ
+    // å®šä¹‰éŸ³ç¬¦é¢‘ç‡è¡¨ [éŸ³åŒº][éŸ³è°ƒ] -> é¢‘ç‡
     uint16_t note_freq[3][7] = {
-        // µÍÒôÇø (0)
+        // ä½éŸ³åŒº (0)
         {C3, D3, E3, F3, G3, A3, B3},
-        // ÖĞÒôÇø (1)  
+        // ä¸­éŸ³åŒº (1)  
         {C4, D4, E4, F4, G4, A4, B4},
-        // ¸ßÒôÇø (2)
+        // é«˜éŸ³åŒº (2)
         {C5, D5, E5, F5, G5, A5, B5}
     };
     
-    // ¶¨ÒåÊ±ÖµÓ³Éä±í [Ê±Öµ] -> ³ÖĞøÊ±¼ä(ms)
-    // Ê±Öµ1: È«Òô·û£¬Ê±Öµ2: ¶ş·ÖÒô·û£¬Ê±Öµ4: ËÄ·ÖÒô·û£¬Ê±Öµ8: °Ë·ÖÒô·û
+    // å®šä¹‰æ—¶å€¼æ˜ å°„è¡¨ [æ—¶å€¼] -> æŒç»­æ—¶é—´(ms)
+    // æ—¶å€¼1: å…¨éŸ³ç¬¦ï¼Œæ—¶å€¼2: äºŒåˆ†éŸ³ç¬¦ï¼Œæ—¶å€¼4: å››åˆ†éŸ³ç¬¦ï¼Œæ—¶å€¼8: å…«åˆ†éŸ³ç¬¦
     uint32_t duration_map[] = {
-        0,      // 0 - ÎŞĞ§
-        WHOLE_NOTE,     // 1 - È«Òô·û
-        HALF_NOTE,      // 2 - ¶ş·ÖÒô·û  
-        HALF_NOTE + QUARTER_NOTE, // 3 - ¶ş·ÖÒô·û+ËÄ·ÖÒô·û£¨¸½µã¶ş·ÖÒô·û£©
-        QUARTER_NOTE,   // 4 - ËÄ·ÖÒô·û
-        0,              // 5 - ÎŞĞ§
-        0,              // 6 - ÎŞĞ§
-        0,              // 7 - ÎŞĞ§
-        EIGHTH_NOTE     // 8 - °Ë·ÖÒô·û
+        0,      // 0 - æ— æ•ˆ
+        WHOLE_NOTE,     // 1 - å…¨éŸ³ç¬¦
+        HALF_NOTE,      // 2 - äºŒåˆ†éŸ³ç¬¦  
+        HALF_NOTE + QUARTER_NOTE, // 3 - äºŒåˆ†éŸ³ç¬¦+å››åˆ†éŸ³ç¬¦ï¼ˆé™„ç‚¹äºŒåˆ†éŸ³ç¬¦ï¼‰
+        QUARTER_NOTE,   // 4 - å››åˆ†éŸ³ç¬¦
+        0,              // 5 - æ— æ•ˆ
+        0,              // 6 - æ— æ•ˆ
+        0,              // 7 - æ— æ•ˆ
+        EIGHTH_NOTE     // 8 - å…«åˆ†éŸ³ç¬¦
     };
     int i;
     
-    // ±éÀú¶şÎ¬Êı×éÖĞµÄÃ¿¸öÒô·û
+    // éå†äºŒç»´æ•°ç»„ä¸­çš„æ¯ä¸ªéŸ³ç¬¦
     for ( i = 0; i < rows; i++) {
-        int yinQu = arr[i][0];     // ÒôÇø£º0-µÍÒô£¬1-ÖĞÒô£¬2-¸ßÒô
-        int yinDiao = arr[i][1];   // Òôµ÷£º1-7¶ÔÓ¦do,re,mi,fa,sol,la,si
-        int shiZhi = arr[i][2];    // Ê±Öµ£º1-È«Òô·û£¬2-¶ş·ÖÒô·û£¬4-ËÄ·ÖÒô·û£¬8-°Ë·ÖÒô·û
+        int yinQu = arr[i][0];     // éŸ³åŒºï¼š0-ä½éŸ³ï¼Œ1-ä¸­éŸ³ï¼Œ2-é«˜éŸ³
+        int yinDiao = arr[i][1];   // éŸ³è°ƒï¼š1-7å¯¹åº”do,re,mi,fa,sol,la,si
+        int shiZhi = arr[i][2];    // æ—¶å€¼ï¼š1-å…¨éŸ³ç¬¦ï¼Œ2-äºŒåˆ†éŸ³ç¬¦ï¼Œ4-å››åˆ†éŸ³ç¬¦ï¼Œ8-å…«åˆ†éŸ³ç¬¦
         
-        // ¼ÆËã³ÖĞøÊ±¼ä
+        // è®¡ç®—æŒç»­æ—¶é—´
         if (shiZhi == 3) {
-            duration = HALF_NOTE + QUARTER_NOTE;  // ¸½µã¶ş·ÖÒô·û
+            duration = HALF_NOTE + QUARTER_NOTE;  // é™„ç‚¹äºŒåˆ†éŸ³ç¬¦
         } else {
             duration = duration_map[shiZhi];
         }
         
-        // ¼ì²éÊÇ·ñÎªĞİÖ¹·û (Á½¸ö0±íÊ¾ĞİÖ¹·û)
+        // æ£€æŸ¥æ˜¯å¦ä¸ºä¼‘æ­¢ç¬¦ (ä¸¤ä¸ª0è¡¨ç¤ºä¼‘æ­¢ç¬¦)
         if (yinQu == 0 && yinDiao == 0) {
-            // ĞİÖ¹·û - Ö±½ÓÑÓÊ±
+            // ä¼‘æ­¢ç¬¦ - ç›´æ¥å»¶æ—¶
             REST;
             delay_ms(duration);
-            continue; // Ìø¹ıºóĞø´¦Àí
+            continue; // è·³è¿‡åç»­å¤„ç†
         }
         
-        // ÑéÖ¤ÊäÈë²ÎÊıµÄºÏ·¨ĞÔ
+        // éªŒè¯è¾“å…¥å‚æ•°çš„åˆæ³•æ€§
         if (yinQu < 0 || yinQu > 2) {
-            // ÎŞĞ§ÒôÇø£¬²¥·ÅĞİÖ¹·û
+            // æ— æ•ˆéŸ³åŒºï¼Œæ’­æ”¾ä¼‘æ­¢ç¬¦
             REST;
             delay_ms(duration);
         }
         else if (yinDiao < 1 || yinDiao > 7) {
-            // ÎŞĞ§Òôµ÷£¬²¥·ÅĞİÖ¹·û
+            // æ— æ•ˆéŸ³è°ƒï¼Œæ’­æ”¾ä¼‘æ­¢ç¬¦
             REST;
             delay_ms(duration);
         }
         else if (shiZhi != 1 && shiZhi != 2 && shiZhi != 4 && shiZhi != 8) {
-            // ÎŞĞ§Ê±Öµ£¬Ê¹ÓÃÄ¬ÈÏËÄ·ÖÒô·û
+            // æ— æ•ˆæ—¶å€¼ï¼Œä½¿ç”¨é»˜è®¤å››åˆ†éŸ³ç¬¦
             Set_PWM_Frequency(note_freq[yinQu][yinDiao-1]);
             delay_ms(QUARTER_NOTE);
         }
         else {
-            // ²¥·ÅÓĞĞ§Òô·û
+            // æ’­æ”¾æœ‰æ•ˆéŸ³ç¬¦
             Set_PWM_Frequency(note_freq[yinQu][yinDiao-1]);
             delay_ms(duration);
             
-            // ¿ÉÑ¡£ºÔÚÒô·ûÖ®¼äÌí¼Ó¶ÌÔİµÄ¼ä¸ô£¬Ê¹ÒôÀÖ¸üÇåÎú
-            if (i < rows - 1) { // ²»ÊÇ×îºóÒ»¸öÒô·û
+            // å¯é€‰ï¼šåœ¨éŸ³ç¬¦ä¹‹é—´æ·»åŠ çŸ­æš‚çš„é—´éš”ï¼Œä½¿éŸ³ä¹æ›´æ¸…æ™°
+            if (i < rows - 1) { // ä¸æ˜¯æœ€åä¸€ä¸ªéŸ³ç¬¦
                 REST;
-                delay_ms(20); // 20msµÄ¼ä¸ô
+                delay_ms(20); // 20msçš„é—´éš”
             }
         }
     }
     
-    // ²¥·Å½áÊøºó¹Ø±ÕÉùÒô
+    // æ’­æ”¾ç»“æŸåå…³é—­å£°éŸ³
     REST;
 }
 
-// ============================ ÀÖÇúÊı¾İ¶¨Òå ============================
+// ============================ ä¹æ›²æ•°æ®å®šä¹‰ ============================
 
 /**
-  * ¡¶Ğ¡ĞÇĞÇ¡·ÀÖÇúÊı¾İ
-  * ¸ñÊ½£º[ÒôÇø, Òô·û, Ê±Öµ]
-  * ÒôÇø: 1-ÖĞÒô, 2-¸ßÒô
-  * Òô·û: 1-7´ú±ído,re,mi,fa,sol,la,si
-  * Ê±Öµ: 4-ËÄ·ÖÒô·û, 2-¶ş·ÖÒô·û
+  * ã€Šå°æ˜Ÿæ˜Ÿã€‹ä¹æ›²æ•°æ®
+  * æ ¼å¼ï¼š[éŸ³åŒº, éŸ³ç¬¦, æ—¶å€¼]
+  * éŸ³åŒº: 1-ä¸­éŸ³, 2-é«˜éŸ³
+  * éŸ³ç¬¦: 1-7ä»£è¡¨do,re,mi,fa,sol,la,si
+  * æ—¶å€¼: 4-å››åˆ†éŸ³ç¬¦, 2-äºŒåˆ†éŸ³ç¬¦
   */
 int xiaoXingXing[][3] = {
-    {1, 1, 4},  // ÖĞÒô1£¬ËÄ·ÖÒô·û
-    {1, 1, 4},  // ÖĞÒô1£¬ËÄ·ÖÒô·û
-    {2, 5, 4},  // ¸ßÒô5£¬ËÄ·ÖÒô·û
-    {2, 5, 4},  // ¸ßÒô5£¬ËÄ·ÖÒô·û
-    {2, 6, 4},  // ¸ßÒô6£¬ËÄ·ÖÒô·û
-    {2, 6, 4},  // ¸ßÒô6£¬ËÄ·ÖÒô·û
-    {2, 5, 2},  // ¸ßÒô5£¬¶ş·ÖÒô·û
+    {1, 1, 4},  // ä¸­éŸ³1ï¼Œå››åˆ†éŸ³ç¬¦
+    {1, 1, 4},  // ä¸­éŸ³1ï¼Œå››åˆ†éŸ³ç¬¦
+    {2, 5, 4},  // é«˜éŸ³5ï¼Œå››åˆ†éŸ³ç¬¦
+    {2, 5, 4},  // é«˜éŸ³5ï¼Œå››åˆ†éŸ³ç¬¦
+    {2, 6, 4},  // é«˜éŸ³6ï¼Œå››åˆ†éŸ³ç¬¦
+    {2, 6, 4},  // é«˜éŸ³6ï¼Œå››åˆ†éŸ³ç¬¦
+    {2, 5, 2},  // é«˜éŸ³5ï¼ŒäºŒåˆ†éŸ³ç¬¦
     
-    {2, 4, 4},  // ¸ßÒô4£¬ËÄ·ÖÒô·û
-    {2, 4, 4},  // ¸ßÒô4£¬ËÄ·ÖÒô·û
-    {2, 3, 4},  // ¸ßÒô3£¬ËÄ·ÖÒô·û
-    {2, 3, 4},  // ¸ßÒô3£¬ËÄ·ÖÒô·û
-    {2, 2, 4},  // ¸ßÒô2£¬ËÄ·ÖÒô·û
-    {2, 2, 4},  // ¸ßÒô2£¬ËÄ·ÖÒô·û
-    {1, 1, 2},  // ÖĞÒô1£¬¶ş·ÖÒô·û
+    {2, 4, 4},  // é«˜éŸ³4ï¼Œå››åˆ†éŸ³ç¬¦
+    {2, 4, 4},  // é«˜éŸ³4ï¼Œå››åˆ†éŸ³ç¬¦
+    {2, 3, 4},  // é«˜éŸ³3ï¼Œå››åˆ†éŸ³ç¬¦
+    {2, 3, 4},  // é«˜éŸ³3ï¼Œå››åˆ†éŸ³ç¬¦
+    {2, 2, 4},  // é«˜éŸ³2ï¼Œå››åˆ†éŸ³ç¬¦
+    {2, 2, 4},  // é«˜éŸ³2ï¼Œå››åˆ†éŸ³ç¬¦
+    {1, 1, 2},  // ä¸­éŸ³1ï¼ŒäºŒåˆ†éŸ³ç¬¦
 };
 
 /**
-  * ¡¶ÃûÕìÌ½¿ÂÄÏ¡·Ö÷ÌâÇúÀÖÇúÊı¾İ
+  * ã€Šåä¾¦æ¢æŸ¯å—ã€‹ä¸»é¢˜æ›²ä¹æ›²æ•°æ®
   */
-		// ÀÖÇúÊı¾İÊı×é
-// Ã¿ĞĞÈı¸öÖµ£º[ÒôÇø, Òô·û, Ê±Öµ]
-// ÒôÇø: 0-µÍÒô, 1-ÖĞÒô, 2-¸ßÒô
-// Òô·û: 1-7´ú±ído, re, mi, fa, sol, la, si
-// Ê±Öµ: ±íÊ¾Õâ¸öÒô·û³ÖĞøµÄÊ±¼äÊÇ»ù×¼½ÚÅÄµÄ¼¸·ÖÖ®Ò»
+		// ä¹æ›²æ•°æ®æ•°ç»„
+// æ¯è¡Œä¸‰ä¸ªå€¼ï¼š[éŸ³åŒº, éŸ³ç¬¦, æ—¶å€¼]
+// éŸ³åŒº: 0-ä½éŸ³, 1-ä¸­éŸ³, 2-é«˜éŸ³
+// éŸ³ç¬¦: 1-7ä»£è¡¨do, re, mi, fa, sol, la, si
+// æ—¶å€¼: è¡¨ç¤ºè¿™ä¸ªéŸ³ç¬¦æŒç»­çš„æ—¶é—´æ˜¯åŸºå‡†èŠ‚æ‹çš„å‡ åˆ†ä¹‹ä¸€
 int KeNan[][3]={
                {1700,0,0},
 							 {1,1,2},
@@ -593,7 +593,7 @@ int KeNan[][3]={
 							 {0,6,2}
               };
 /**
-  * ¡¶JIALEBI¡·ÀÖÇúÊı¾İ
+  * ã€ŠJIALEBIã€‹ä¹æ›²æ•°æ®
   */
 int JIALEBI[][3]={
    {1,3,2},
@@ -673,58 +673,58 @@ int JIALEBI[][3]={
 };
 
 /**
-  * @brief  Ö÷º¯Êı
-  * @param  ÎŞ
-  * @retval int ³ÌĞòÖ´ĞĞ×´Ì¬
-  * @º¯Êı¹¦ÄÜ£º³ÌĞòÈë¿Ú£¬³õÊ¼»¯Ó²¼ş²¢²¥·ÅÒôÀÖ
-  * @º¯ÊıÊµÀı£ºÎŞ
-  * @±¸×¢£º³ÌĞòÖ´ĞĞÍê±Ïºó½øÈëÎŞÏŞÑ­»·
+  * @brief  ä¸»å‡½æ•°
+  * @param  æ— 
+  * @retval int ç¨‹åºæ‰§è¡ŒçŠ¶æ€
+  * @å‡½æ•°åŠŸèƒ½ï¼šç¨‹åºå…¥å£ï¼Œåˆå§‹åŒ–ç¡¬ä»¶å¹¶æ’­æ”¾éŸ³ä¹
+  * @å‡½æ•°å®ä¾‹ï¼šæ— 
+  * @å¤‡æ³¨ï¼šç¨‹åºæ‰§è¡Œå®Œæ¯•åè¿›å…¥æ— é™å¾ªç¯
   */
 int main(void)
 {
-    // ÏµÍ³³õÊ¼»¯
+    // ç³»ç»Ÿåˆå§‹åŒ–
     RCC_Configuration();
     
-    // GPIO³õÊ¼»¯
+    // GPIOåˆå§‹åŒ–
     GPIO1_Init();
     
-    // °´¼ü³õÊ¼»¯
+    // æŒ‰é”®åˆå§‹åŒ–
     key_init();
     
-    // PWM³õÊ¼»¯
+    // PWMåˆå§‹åŒ–
     TIM3_PWM_Init();
     TIM2_Init();
     Serial_Init();
     
-    // ÉèÖÃ³õÊ¼Õ¼¿Õ±È
+    // è®¾ç½®åˆå§‹å ç©ºæ¯”
     TIM_SetCompare1(TIM3, 50);
     
-    // ²¥·ÅJIALEBIÀÖÇú
+    // æ’­æ”¾JIALEBIä¹æ›²
     BoFangGeQu(JIALEBI, 200);
     
-    // ¹Ø±ÕPWM
+    // å…³é—­PWM
     Set_PWM_Frequency(0);
     
-    // Ö÷Ñ­»·
+    // ä¸»å¾ªç¯
     while(1)
     {
-        // Ö÷Ñ­»· - ²¥·ÅÍê³Éºó±£³Ö¾²Òô×´Ì¬
+        // ä¸»å¾ªç¯ - æ’­æ”¾å®Œæˆåä¿æŒé™éŸ³çŠ¶æ€
     }
 }
 
 /**
-  * @brief  TIM2ÖĞ¶Ï·şÎñº¯Êı
-  * @param  ÎŞ
-  * @retval ÎŞ
-  * @º¯Êı¹¦ÄÜ£ºTIM2¶¨Ê±Æ÷ÖĞ¶Ï´¦Àí£¬Ã¿10msÖ´ĞĞÒ»´Î
-  * @º¯ÊıÊµÀı£º×Ô¶¯µ÷ÓÃ£¬ÎŞĞèÊÖ¶¯µ÷ÓÃ
-  * @±¸×¢£ºÓÃÓÚÎ¬»¤Ê±¼ä¼ÆÊıÆ÷£¬Ö§³Ö¾«È·ÑÓÊ±¹¦ÄÜ
+  * @brief  TIM2ä¸­æ–­æœåŠ¡å‡½æ•°
+  * @param  æ— 
+  * @retval æ— 
+  * @å‡½æ•°åŠŸèƒ½ï¼šTIM2å®šæ—¶å™¨ä¸­æ–­å¤„ç†ï¼Œæ¯10msæ‰§è¡Œä¸€æ¬¡
+  * @å‡½æ•°å®ä¾‹ï¼šè‡ªåŠ¨è°ƒç”¨ï¼Œæ— éœ€æ‰‹åŠ¨è°ƒç”¨
+  * @å¤‡æ³¨ï¼šç”¨äºç»´æŠ¤æ—¶é—´è®¡æ•°å™¨ï¼Œæ”¯æŒç²¾ç¡®å»¶æ—¶åŠŸèƒ½
   */
 void TIM2_IRQHandler(void)
 {
     if (TIM_GetITStatus(TIM2, TIM_IT_Update) != RESET)
     {
         TIM_ClearITPendingBit(TIM2, TIM_IT_Update);
-        timer2_counter++;  // ¼ÆÊıÆ÷µİÔö£¬ÓÃÓÚ¾«È·ÑÓÊ±
+        timer2_counter++;  // è®¡æ•°å™¨é€’å¢ï¼Œç”¨äºç²¾ç¡®å»¶æ—¶
     }
 }
