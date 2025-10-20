@@ -1,0 +1,6 @@
+-c --cpu Cortex-M4.fp -D__MICROLIB -g -O0 --apcs=interwork -I..\CORE -I..\USER -I..\FWLIB\inc
+-I "C:\Documents and Settings\Administrator\桌面\实验5 串口\USER\RTE"
+-I C:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\1.0.8\Device\Include
+-I C:\Keil_v5\ARM\CMSIS\Include
+-D__UVISION_VERSION="514" -DSTM32F40_41xxx -DSTM32F40_41xxx -DUSE_STDPERIPH_DRIVER
+-o ..\obj\stm32f4xx_i2c.o --omf_browse ..\obj\stm32f4xx_i2c.crf --depend ..\obj\stm32f4xx_i2c.d --feedback "..\OBJ\Template.fed" "..\FWLIB\src\stm32f4xx_i2c.c"
